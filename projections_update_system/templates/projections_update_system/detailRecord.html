@@ -1,0 +1,237 @@
+{% load to_currency %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load create_child_form_id_with_tag %}
+<div style="overflow-x:auto; overflow-y:auto; max-height:500px;">
+<table class="table table-striped" id="account-data">
+    <style>
+        tr>th:first-child,tr>td:first-child {
+        position: sticky;
+        left: 0;}
+    </style>
+    <thead style="top: 0;">
+        <tr>
+            <th style="background: #FFFFFF;">Account</th>
+            <th>Budget Amount</th>
+            <th>Actual YTD</th>
+            <th>YTD Actual + Enc.</th>
+            <th>Spend Rate</th>
+            {# lynn#}
+            <th>Activity</th>
+            <th>Program</th>
+            <th>Location</th>
+            <th>Projection</th>
+            <th>Net Budget</th>
+            {% if recordForms %} <th>Comments</th> {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for record in records %}
+        <tr>
+            <td style="background: #f2f2f2;">{{ record.account }}</td>
+            <td id="{% create_child_form_id_with_tag record 'budgetAmount' %}" style="text-align: right; {% if record.budget_amount < 0 %} color: #ff4040 {% endif %}">
+                {{ record.budget_amount |to_currency }}
+            </td>
+            <td style="text-align: right; {% if record.actual_YTD_end_of_period < 0 %} color: #ff4040 {% endif %}">
+                {{ record.actual_YTD_end_of_period |to_currency }}
+            </td>
+            <td class="right-align" style="{% if summary.actual_YTD_end_of_period < 0 %} color: red {% endif %}; ; ">
+               {{ record.ytd_spent | to_currency }}
+{#            lynn ytd spent#}
+            </td>
+            <td class="right-align" style="{% if summary.spend_rate < 0 %} color: red {% endif %}; ; ">
+                {{ record.spent_rate |to_currency }}
+            </td>
+{#        lynn: todo: need to double check with the formula#}
+            <td id="{% create_child_form_id_with_tag record 'activity' %}">
+                {{ record.activity }}
+            </td>
+            <td id="{% create_child_form_id_with_tag record 'program' %}">
+                {{ record.program }}
+            </td>
+            <td id="{% create_child_form_id_with_tag record 'location' %}">
+                {{ record.location }}
+            </td>
+
+            {% if recordForms %}
+                {% with recordForms|get_value:record.pk as form %}
+                    {% crispy form form.helper "bootstrap4" %}
+                {% endwith %}
+            {% endif %}
+
+        </tr>
+    {% endfor %}
+    <tr style="font-weight: bold">
+        <td style="background: #f2f2f2;">TOTAL</td>
+        <td id="totalBudgetAmount" style="text-align: right; {% if summary.budget_amount < 0 %} color: #ff4040 {% endif %}">
+            {{ summary.budget_amount |to_currency }}
+        </td>
+        <td style="text-align: right; {% if summary.actual_YTD_end_of_period < 0 %} color: #ff4040 {% endif %}">
+            {{ summary.actual_YTD_end_of_period |to_currency }}
+        </td>
+        <td style="text-align: right; {% if summary.ytd_spent < 0 %} color: #ff4040 {% endif %}">
+            {{ summary.ytd_spent |to_currency }}
+        </td>
+        <td style="text-align: right; {% if summary.spend_rate < 0 %} color: #ff4040 {% endif %}">
+            {{ summary.spend_rate |to_currency }}
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input class="numberinput form-control right-align" id="SummaryProjectionTotal"
+                {% if recordForms %}
+                    disabled
+                {% endif %} >
+
+        </td>
+        <td><input id="totalChildNetBudgetAmount" class="numberinput form-control right-align" disabled></td>
+        <td></td>
+    </tr>
+
+    </tbody>
+</table>
+</div>
+<button class="btn btn-info btn-update" style="width: 100%" id="childSubmitButton" onclick="submitChildren()" disabled>Update</button>
+{% block modalScripts %}
+    <script src="{% static 'projections_update_system/formSubmission.js' %}"></script>
+    <script type="text/javascript">
+        /**
+         * Returns a list of all fields that are child projection fields in the modal
+         * @returns {*|jQuery}
+         */
+        function getChildProjectionFields() {
+            var children = $("input[id^='child']");
+            return children.filter(function () {
+                return this.id.endsWith("projection");
+            });
+        }
+
+        function getChildNetBudgetFields() {
+            var children = $("input[id^='child']");
+            return children.filter(function () {
+                return this.id.endsWith("netBudget");
+            });
+        }
+
+        function getChildProjectionForms(){
+            var forms = $("form[data-isChild]");
+            return forms;
+        }
+
+        /**
+         * Returns the sum of all the child projection fields in the modal
+         * @returns {number}
+         */
+        function totalChildProjections() {
+
+            var sum = 0;
+            var children = $("input[id^='child']");
+            for (let i = 0; i < children.length; i++) {
+                if (children[i].id.endsWith("projection")) {
+                    var projectionVal = convertCurrencyToInt($(children[i]).val());
+                    if (isNaN(projectionVal)) {
+                        projectionVal = 0;
+                    }
+                    sum += projectionVal;
+                }
+            }
+            return sum;
+        }
+
+        /**
+         * Will update the projection summary value
+         */
+        function updateProjectionValue() {
+            var total = totalChildProjections()
+            $("#SummaryProjectionTotal").val(total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        }
+        /**
+         * Updates the projection value outside of the modal from the corresponding detail view
+         */
+        function updateSummaryViewProjectionValue(total) {
+            $('{{ summaryFieldID }}').val(total);
+        }
+
+        /**
+         * Updates the summary value inside of the modal from the corresponding summary view projection
+         */
+        function updateDetailViewSummaryProjectionValue() {
+            $("#SummaryProjectionTotal").val($('{{ summaryFieldID }}').val());
+        }
+
+        /**
+         * Ensures that the projection summary will be updated with every change made to a child projection
+         */
+        function setCallbacksOnProjections() {
+            var children = getChildProjectionFields();
+            for (let i = 0; i < children.length; i++) {
+                $(children[i]).keyup(updateProjectionValue);
+                $(children[i]).keyup(updateNetBudget);
+                $(children[i]).keyup(updateChildTotalNetBudget);
+            }
+        }
+
+        function submitChildren(){
+            var forms = getChildProjectionForms();
+            var projectionFormsObjects = createProjectionFormObjects(forms);
+            submitForm(projectionFormsObjects, "{% url 'updateProjections' org_id %}", '{{ csrf_token }}');
+            $('#account-info').modal('hide');
+            updateSummaryViewProjectionValue($('#SummaryProjectionTotal').val())
+            determineSubmitButtonDisabledState();
+        }
+
+        function allRequiredChildInputsAreFilled(){
+            var inputs = $('input[id^="child"]');
+            for (let i = 0; i < inputs.length; i++) {
+                var currentInput = $(inputs[i]);
+                if (currentInput.prop("required") && !currentInput.val()){
+                    console.log(currentInput)
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function determineChildSubmitButtonDisabledState(){
+            enableChildSubmitButton();
+            if (!allRequiredChildInputsAreFilled()){
+                disableChildSubmitButton();
+            }
+        }
+
+        function disableChildSubmitButton(){
+            $("#childSubmitButton").prop("disabled", true);
+        }
+
+        function enableChildSubmitButton(){
+            $("#childSubmitButton").prop("disabled", false);
+        }
+
+        function updateChildTotalNetBudget(){
+            var totalBudgetAmountField = $("#totalBudgetAmount");
+            var totalNetBudgetField = $("#totalChildNetBudgetAmount");
+            var totalProjectionField = $("#SummaryProjectionTotal");
+            let totalBudgetAmount = convertCurrencyToInt(totalBudgetAmountField.text());
+            let totalProjection = convertCurrencyToInt(totalProjectionField.val());
+            totalNetBudgetField.val(totalBudgetAmount - totalProjection);
+            formatCurrencyField(totalNetBudgetField, "black", "red");
+        }
+
+        setCallbacksOnProjections();
+        getChildProjectionForms();
+        determineChildSubmitButtonDisabledState();
+        updateDetailViewSummaryProjectionValue();
+        updateProjectionValue();
+        updateNetBudget();
+        updateChildTotalNetBudget();
+        $('input[id^="child"]').keyup(determineChildSubmitButtonDisabledState);
+        $('#SummaryProjectionTotal').change(function (){
+            formatCurrencyField($(this), 'black', 'red');
+            $("#totalChildNetBudgetAmount").val(convertCurrencyToInt($("#totalBudgetAmount").text()) - convertCurrencyToInt($(this).val()));
+
+        });
+
+
+    </script>
+
+{% endblock %}

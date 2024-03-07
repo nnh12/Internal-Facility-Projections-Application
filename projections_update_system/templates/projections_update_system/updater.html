@@ -1,0 +1,492 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load get_value %}
+{% load to_currency %}
+{% load get_account_parent_level_E_ID %}
+{% load create_form_id_with_tag %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'projections_update_system/projections.css' %}">
+
+{% endblock %}
+
+
+
+{% block header %} <!--Greets the user on the page-->
+    <h3 class="mb-0">
+         [{{ organization.id }}] {{ organization.name }} Projections
+        <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block"></span>
+    </h3>
+   <style>
+    .fixTableHead {
+        overflow-y: auto;
+        height: calc(100vh - 150px);
+    }
+    .fixTableHead table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .fixTableHead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    .fixTableHead th:first-child{
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .fixTableHead tr>th:first-child,tr>td:first-child {
+        position: sticky;
+        left: 0;
+    }
+    .fixTableHead tr:nth-child(odd) td {
+            background: #eeeeee;
+        }
+    .fixTableHead tr:nth-child(even) td {
+            background: #FFFFFF;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %} <!-- Body already contained in a container so feel free to just add rows -->
+    {% if not num_records_input %}
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p> The data was uploaded on: {{ lastUploadedMonth }} {{ lastUploadedYear }}</p>
+                                <p> The projection was updated on: {{ ProjectionLastUpdatedTime }}</p>
+                                <p class="text-muted">Update {{ organization.name }}'s Projections here and click submit
+                                    when you are done.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="fileSelectorCard" style="" class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">Update Your {{ organization.name }} Projections Here</h5>
+                            </div>
+                            <div class="col-sm-12">
+                                <button id="submitButton" class=" btn btn-info float-right" onclick="determineSubmitButtonDisabledState(); submitAll()">Submit</button>
+{#                                <button id="ad" class=" btn btn-info float-left" onclick="addRow()">Add Row</button>#}
+                            </div>
+
+                        </div>
+
+                            <div class="fixTableHead" style ="overflow: auto">
+                                <table class="table table-striped sortable" style="" id="accountTable">
+                                    <thead>
+                                        <th style="background: #FFFFFF"> Account</th>
+                                        <th>Budget Amount</th>
+                                        <th>YTD Actual</th>
+                                        <th>YTD Actual + Enc.</th>
+                                        <th>Spend Rate</th>
+                                        <th style="text-align: right">Projection</th>
+                                        <th style="text-align: right">Net Budget</th>
+                                        <th style="text-align: right">Comments</th>
+                                        <th>See Details</th>
+                                    </thead>
+
+
+                                    {% for account, summary in summaries.items %}
+                                        <tr>
+
+                                            <td>
+                                                {{ summary.account_parent_level_E}}
+                                            </td>
+                                            <!--Negative number is red -->
+                                            <td class="right-align" id="{% create_form_id_with_tag summary 'budgetAmount' %}" style="{% if summary.budget_amount < 0 %} color: red {% endif %};">
+                                                {{ summary.budget_amount |to_currency }}
+                                            </td>
+                                            <td class="right-align" style="{% if summary.actual_YTD_end_of_period < 0 %} color: red {% endif %}; ; ">
+                                                {{ summary.actual_YTD_end_of_period |to_currency }}
+                                            </td>
+                                            <td class="right-align" style="{% if summary.ytd_spent < 0 %} color: red {% endif %}; ; ">
+                                                {{ summary.ytd_spent |to_currency }}
+                                            </td>
+                                            <td class="right-align" style="{% if summary.spend_rate < 0 %} color: red {% endif %}; ; ">
+                                                {{ summary.spend_rate| to_currency }}
+                                            </td>
+
+                                            <!--Uses the TableData template to add form fields on as additional table data
+                                            entries -->
+                                            {% with recordForms|get_value:account as form %}
+                                                {% crispy form form.helper "bootstrap4" %}
+                                            {% endwith %}
+
+                                            <td style="text-align: center">
+                                                <a href="#!"
+                                                   onclick="viewExtraInformation('{{ fullOrganizationLabel }}', '{{ summary.account_parent_level_E }}',
+                                                           '{{ summary.fiscal_month }}', '#{{ summary.account_parent_level_E |get_account_parent_level_E_ID }}_projection')">
+                                                    <i class="mdi mdi-information-outline"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    {% endfor %}
+
+                                    <tr class = "added" hidden>
+                                        <td>
+                                            <div class="dropdown" id ="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Select An Account
+                                                </button>
+
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" fid ="dropdownMenu">
+
+                                                    {% for account in acc_list_except_sum %}
+                                                        <a class="dropdown-item" onclick="select(this)">{{account}}
+                                                        </a>
+                                                    {% endfor %}
+                                              </div>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <input type="number" class="form-control" v-model="act" value="0" style="text-align: right" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" v-model="act" value="0" style="text-align: right" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" v-model="act" value="0" style="text-align: right" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" v-model="act" value="0" style="text-align: right" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" v-model="act" value="0" style="text-align: right">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" v-model="act" value="0" style="text-align: right" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" v-model="act" >
+                                        </td>
+                                        
+                                        <td style="text-align: center">
+                                            <a href="#!"
+                                               onclick="viewExtraInformation('{{ fullOrganizationLabel }}', '{{ summary.account_parent_level_E }}',
+                                                       '{{ summary.fiscal_month }}', '#{{ summary.account_parent_level_E |get_account_parent_level_E_ID }}_projection')">
+                                                <i class="mdi mdi-information-outline"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+{#                                    Lynn add a row#}
+
+                                    {# Bottom Line #}
+
+                                    <tr style="font-weight: bold; background-color: #eeeeee; color:"black">
+
+                                            <td>
+                                                {{ bottomLine.account_parent_level_E}}
+                                            </td>
+                                            <td class="right-align" id="bottomLineBudgetAmount" style="{% if  bottomLine.budget_amount  < 0 %} color: #ff4040 {% endif %}; ">
+                                                {{ bottomLine.budget_amount |to_currency }}
+                                            </td>
+                                            <td class="right-align" style="{% if bottomLine.actual_YTD_end_of_period < 0 %} color: #ff4040 {% endif %}; ">
+                                                {{ bottomLine.actual_YTD_end_of_period |to_currency }}
+                                            </td>
+                                            <td class="right-align" style="{% if bottomLine.ytd_spent < 0 %} color: #ff4040 {% endif %}; ">
+                                                {{ bottomLine.ytd_spent |to_currency }}
+                                            </td>
+                                            {# Lynn #}
+                                            <td class="right-align" style="{% if bottomLine.spend_rate < 0 %} color: #ff4040 {% endif %}; ">
+                                                {{ bottomLine.spend_rate| to_currency }}
+                                            </td>
+                                            {# Lynn #}
+
+
+                                            <td class="right-align" id="bottomLineProjection"></td>
+                                            <td class="right-align" id="bottomLineNetProjection"></td>
+
+                                            <td></td>
+
+
+
+                                            <td style="text-align: center">
+
+                                            </td>
+
+                                        </tr>
+
+                                </table>
+                            </div>
+{#                          </div>#}
+{#                      </div>#}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    {% if num_records_input %}
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <h5>Upload Status:</h5>
+                                <p class="text-muted">
+                                </p>
+                            </div>
+                            <div class="col-sm-5 text-md-right">
+                                <button class="btn btn-icon-text mb-3 mb-sm-0 btn-inverse-primary font-weight-normal"
+                                        type="button">
+                                    <i class="mdi mdi-email btn-icon-prepend"></i>Open to Organizations
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        {% if num_records_input %}
+                                            <p>File with {{ num_records_input }} rows</p>
+                                            <p>{{ num_exist }} of them are duplicates</p>
+                                            <p>{{ num_successful_upload }} rows uploaded successfully</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+
+
+    <!-- The Modal -->
+
+
+    <div class="modal fade none-border" id="account-info">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="resize: both; overflow: scroll">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="account-info-title"></h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+{#lynn#}
+                </div>
+                <div class="modal-body" id="account-data">
+
+
+                </div>
+                <div class="modal-footer">
+{#                                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>#}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var table = document.getElementById("accountTable");
+        var rows = Array.from(table.rows).slice(1); // Skip the header row
+
+        rows.sort(function(a, b) {
+        var accountA = a.cells[0].innerText.toLowerCase();
+        var accountB = b.cells[0].innerText.toLowerCase();
+        return accountA.localeCompare(accountB);
+        });
+
+        rows.forEach(function(row) {
+        table.appendChild(row);
+        });
+    });
+    </script>
+
+
+
+
+
+
+
+    <script src="{% static 'projections_update_system/formSubmission.js' %}"></script>
+    <script>
+        function success_msg() {
+            alert("Your updates have been submitted!");
+        }
+    </script>
+{#    Lynn#}
+    <script type="text/javascript">
+        function reloadAjax() {
+            var container = $('#detailRecord');
+            container.load('{% url "detailRecord" %}', {foo: "this is required to force a post rather than get"}
+            );
+        };
+
+
+        function submitAll() {
+            var forms = $('.projectionForm');
+            var i = 0;
+            var projectionFormsObjects = createProjectionFormObjects(forms);
+            {#projections_update_system/static/projections_update_system/formSubmission.js#}
+            console.log(projectionFormsObjects)
+            submitForm(projectionFormsObjects, "{% url 'updateProjections' org_id %}", '{{ csrf_token }}');
+            console.log("Form submitted successfully");
+            window.removeEventListener('beforeunload', beforeUnloadListener);
+            success_msg();
+            window.location.assign('{% url 'selectOrgToUpdate' %}');
+            {#projections_update_system/static/projections_update_system/formSubmission.js#}
+
+        }
+
+        function viewExtraInformation(org, accountParentLevelE, month, summaryFieldID) {
+            var container = $("#account-data");
+            console.log(org, "|", accountParentLevelE, "|", month);
+            container.load("{% url 'viewRecordInformation' %}", {"org": org, "accountParentLevelE": accountParentLevelE,
+                "month": month, "summaryFieldID": summaryFieldID, "org_id": {{org_id}}});
+            $("#account-info-title").html("<strong>" + accountParentLevelE + "</strong>");
+            $("#account-info").modal();
+
+        }
+
+        function select(element){
+            element.parentNode.parentNode.children[0].textContent = element.textContent
+        }
+
+        function formatNumberField(){
+            console.log("Format field", $(this).val());
+            console.log("Format field", parseInt($(this).val()));
+        }
+
+        function enableSubmitButton(){
+            $("#submitButton").prop("disabled", false);
+        }
+
+        function updateBottomLine(){
+            var sum = 0;
+
+            $('[name="projection"]').filter(function () {
+                return !(this.id.startsWith("child"))
+            })
+                .each(function() {
+                sum += convertCurrencyToInt($(this).val());
+            });
+            {#formatCurrencyField($("#bottomLineProjection"), 'white', 'red');#}
+            {#$('#bottomLineProjection').text(sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));#}
+            {#Lynn: add commas to numbers#}
+
+            var cFormat = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $('#bottomLineProjection').text(cFormat);
+            $('#bottomLineProjection').val(convertCurrencyToInt($('#bottomLineProjection').val()));
+
+
+            if (sum < 0) {
+                document.getElementById('bottomLineProjection').style.color = "#ff4040";
+                $('#bottomLineProjection').text("(" + cFormat.toString().slice(1) + ")")
+            }
+
+            var BudgetAmountSum = convertCurrencyToInt($("#bottomLineBudgetAmount").text()) - sum;
+            var nFormat = BudgetAmountSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $("#bottomLineNetProjection").text(nFormat);
+            formatCurrencyField($("#bottomLineNetProjection"), 'black', 'red');
+            $("#bottomLineNetProjection").val(convertCurrencyToInt($('#bottomLineNetProjection').val()));
+
+            if (BudgetAmountSum < 0) {
+                document.getElementById('bottomLineNetProjection').style.color = "#ff4040";
+                $('#bottomLineNetProjection').text("(" + nFormat.toString().slice(1) + ")")
+                }
+        }
+
+
+
+        $('[name="projection"]').keyup(updateBottomLine);
+
+        //On page load
+        $('[name="projection"]').each(function() {
+            formatCurrencyField($(this), 'black', 'red')
+            }
+        );
+        updateBottomLine();
+        updateNetBudget();
+
+        $('#account-info').on('hidden.bs.modal', function () {
+            // do something…
+            updateNetBudget();
+            updateBottomLine();
+        });
+
+        //Determines if submit button should be enabled or disabled
+        determineSubmitButtonDisabledState();
+        $('input').keyup(updateNetBudget);
+
+        // for testing
+        {#window.addEventListener("click", () => {#}
+        {#    console.log("Test");#}
+        {#  });#}
+
+        // formChanged will become true if any field was changed
+        var formChanged = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to form fields
+            var formFields = document.querySelectorAll('input, select, textarea');
+            formFields.forEach(function(field) {
+                field.addEventListener('change', function() {
+                    console.log("change triggered")
+                    formChanged = true;
+                });
+            });
+        });
+
+        // Define the beforeunload event listener
+        function beforeUnloadListener(event) {
+            console.log("beforeunload triggered")
+            if (formChanged) {
+                event.preventDefault();
+                event.returnValue = '';
+            }
+        }
+        window.addEventListener('beforeunload', beforeUnloadListener);
+    </script>
+    {% block modalScripts %} {% endblock %}
+
+    <script type="text/javascript">
+        const accDropDown = $("#accountDropdown");
+        const accSelectorCard = $("#accountSelectorCard");
+        const dropdown = $('.dropdown-menu a');
+
+        const dropdownButton = dropdown.parentNode.children[0];
+
+        const selectAcc = (account) => {
+            accDropDown.html(dropdownVal[account])
+            accSelectorCard.show();
+        };
+
+
+    </script>
+{% endblock %}

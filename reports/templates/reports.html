@@ -1,0 +1,122 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block header %} <!--Greets the user on the page-->
+    <h3 class="mb-0">
+        Reports
+        <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block"></span>
+    </h3>
+{% endblock %}
+
+{% block body %} <!-- Body already contained in a container so feel free to just add rows -->
+    <div class="row">
+            <div class="col-xl-4 col-md-4 col-sm-12 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">FEP Overall Summary</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+{#                                    <img src="{% static 'reports/summaryimg.png' %}" style="width: 100%; height: 100%">#}
+                                    <img src="{% static 'data_upload_system/projectionsImage.png' %}" style = "display: block;margin: 0 auto " style = object-fit:scale-down; height="90px"; >
+
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p> </p>
+                                <p class="text-muted" style="text-align: center"> View Summary Reports  </p>
+
+                            </div>
+                            <div class="col-12">
+                                <a href="https://public.tableau.com/javascripts/api/tableau-2.min.js" class="btn btn-info btn-lg btn-block"> View FEP Overall Summary </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    <div class="col-xl-4 col-md-4 col-sm-12 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">FEP Details</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+{#                                    <img src="{% static 'data_upload_system/projectionsImage.png' %}" style="width: 100%; height: 100%">#}
+                                    <img src="{% static 'data_upload_system/reports.png' %}" style=" display: block; margin: 0 auto" style = object-fit:scale-down height="90px" %>
+
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p> </p>
+
+                                <p class="text-muted" style="text-align: center"> View Organization Reports </p>
+
+                            </div>
+                            <div class="col-12">
+                                <a href="https://public.tableau.com/javascripts/api/tableau-2.min.js" class="btn btn-info btn-lg btn-block"> View FEP Details </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+{#    <div id="data-container-1" style="width:100%;  overflow:scroll;"></div>#}
+{% endblock %}
+
+{% block scripts %}
+      <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+
+    <script type="text/javascript">
+    var viz;
+    function initViz(id, url, num) {
+        url = url + "&output=embed";
+        if (viz != null){
+            viz.dispose();
+        }
+
+
+
+      var containerDiv = document.getElementById(id),
+
+        options = {
+
+          hideTabs: true,
+
+        };
+
+        viz = new tableau.Viz(containerDiv, url, options);
+
+
+      // Create a viz object and embed it in the container div.
+
+
+
+    }
+    initViz("data-container-1", "https://dataviz.rice.edu/#/views/ProjectionsWorkbook_16781393338880/Reportdashboard?:embed=n&:iid=2&:origin=card_share_link", 0);
+    </script>
+{% endblock %}

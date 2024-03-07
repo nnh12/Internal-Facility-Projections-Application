@@ -1,0 +1,92 @@
+{% extends 'base/base.html' %}
+
+{% block header %} <!--Greets the user on the page-->
+
+    <h3 class="mb-0">
+        Welcome to the Example Page
+        <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block">
+            This is just an example template file you can adopt at any time for one of the views.
+        </span>
+    </h3>
+    <div class="d-flex">
+        <button class="btn btn-sm bg-white btn-icon-text border" type="button">
+            <i class="mdi mdi-email btn-icon-prepend"></i> Email
+        </button>
+        <button class="btn btn-sm bg-white btn-icon-text border ml-3" type="button">
+            <i class="mdi mdi-printer btn-icon-prepend"></i> Print
+        </button>
+        <button class="btn btn-sm ml-3 btn-success" type="button"> Add User</button>
+    </div>
+
+{% endblock %}
+
+{% block body %} <!-- Body already contained in a container so feel free to just add rows -->
+    <div class="row">
+        <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <!--Heading row -->
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <h5>This is a card example</h5>
+                            <p class="text-muted"> With a subtitle here. Cards are the essential building blocks of this template so you need to make sure
+                                this component is used frequently. Check the template for other card colors such as success, warning, danger, etc.<a
+                                    class="text-muted font-weight-medium pl-2" href="#"><u>See Details</u></a>
+                            </p>
+                        </div>
+                        <div class="col-sm-5 text-md-right">
+                            <button class="btn btn-icon-text mb-3 mb-sm-0 btn-inverse-primary font-weight-normal"
+                                    type="button">
+                                <i class="mdi mdi-email btn-icon-prepend"></i>Download Report
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="card mb-3 mb-sm-0">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Today Earnings</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">$5,300</h3>
+                                            <p class="text-success m-0">-310 avg. sales</p>
+                                        </div>
+                                        <div class="flot-chart" id="earningChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card mb-3 mb-sm-0">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Product Sold</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">$9,100</h3>
+                                            <p class="text-danger m-0">-310 avg. sales</p>
+                                        </div>
+                                        <div class="flot-chart" id="productChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Today Orders</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">$4,354</h3>
+                                            <p class="text-success m-0">-310 avg. sales</p>
+                                        </div>
+                                        <div class="flot-chart" id="orderChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

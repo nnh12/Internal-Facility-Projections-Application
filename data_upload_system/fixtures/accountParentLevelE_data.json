@@ -1,0 +1,324 @@
+[
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E500",
+      "name": "Endowment Investment Income"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E520",
+      "name": "Sponsored Programs - Government"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E530",
+      "name": "Gift Revenue"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E560",
+      "name": "Endowment Distributions"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E590",
+      "name": "Other Operating Revenue"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E595",
+      "name": "Internal Charge Income Accounts"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E626",
+      "name": "NonOp Investment Income - Other"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E674",
+      "name": "Transfers - Income Allocation"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E675",
+      "name": "Transfers - Chair Support Income Allocation"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E680",
+      "name": "Transfers - Inter / Intra Departmental"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E706",
+      "name": "Salary and Wage Expenses - Staff"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E710",
+      "name": "Salary and Wage Expenses - Student Undergraduate"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E712",
+      "name": "Salary and Wage Expenses - Student Graduate"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E714",
+      "name": "Salary and Wage Expenses - Student Other"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E720",
+      "name": "Fringe Benefit Rates"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E724",
+      "name": "Benefit Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E742",
+      "name": "Scholarship Expenses - Undergraduate"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E750",
+      "name": "Supply Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E753",
+      "name": "Subscription and Membership Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E754",
+      "name": "Non Capitalizable Equipment Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E760",
+      "name": "Travel Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E767",
+      "name": "Rent Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E772",
+      "name": "External Contractor Fees and Services"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E804",
+      "name": "Business and Insurance Services"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E806",
+      "name": "Advertising Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E808",
+      "name": "Legal Fees and Settlements"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E810",
+      "name": "Parking Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E812",
+      "name": "Maintenance Service Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E814",
+      "name": "IT and Communications Service"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E816",
+      "name": "Entertainment and Gift Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E818",
+      "name": "Meeting and Training Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E824",
+      "name": "Print and Copy Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E826",
+      "name": "Mail, Freight and Postage Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E828",
+      "name": "Bad Debt Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E832",
+      "name": "Miscellaneous"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E836",
+      "name": "Bank Charges"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E840",
+      "name": "Art Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E844",
+      "name": "Fixed Equipment Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E846",
+      "name": "Moveable Equipment Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E848",
+      "name": "Other Depreciable Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E862",
+      "name": "Capital Construction Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E864",
+      "name": "Cost of Goods Sold"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E880",
+      "name": "Operating Interest Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E895",
+      "name": "Internal Charge Expense Accounts"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E900",
+      "name": "Non-Operating Interest Expenses"
+    }
+  },
+  {
+    "model": "data_upload_system.AccountParentLevelE",
+    "fields": {
+      "id": "E990",
+      "name": "Expense Suspense - Conversion Only"
+    }
+  }
+]

@@ -1,0 +1,156 @@
+[
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86000",
+      "name": "FE&P Administration"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86020",
+      "name": "FE&P Financial & Business Support"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86100",
+      "name": "FE&P Construction Services"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86101",
+      "name": "FE&P Air Conditioning"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86102",
+      "name": "FE&P Plumbing"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86103",
+      "name": "FE&P Electrical"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86104",
+      "name": "FE&P Carpentry & Painting"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86105",
+      "name": "FE&P Preventive Maintenance"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86106",
+      "name": "FE&P Equipment Repair"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86107",
+      "name": "FE&P Elevator & Mechanical Repair"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86120",
+      "name": "FE&P Facilities Management"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86140",
+      "name": "FE&P Custodial"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86160",
+      "name": "FE&P Groundskeeping"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86200",
+      "name": "FE&P Plant Operations"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86201",
+      "name": "FE&P Controls"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86202",
+      "name": "FE&P Instrumentation"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86300",
+      "name": "FE&P Project Management"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86400",
+      "name": "FE&P Facilities Service Center"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86401",
+      "name": "FE&P Material Support"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86500",
+      "name": "FE&P Campus Planning"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86501",
+      "name": "FE&P Data Analytics"
+    }
+  },
+  {
+    "model": "data_upload_system.Organization",
+    "fields": {
+      "id": "86600",
+      "name": "FE&P Utility Procurement"
+    }
+  }
+]

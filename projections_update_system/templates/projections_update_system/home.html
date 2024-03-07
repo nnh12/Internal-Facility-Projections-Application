@@ -1,0 +1,201 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block header %} <!--Greets the user on the page-->
+    <h3 class="mb-0">
+        Projections Homepage
+        <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block"></span>
+    </h3>
+{% endblock %}
+
+{% block body %} <!-- Body already contained in a container so feel free to just add rows -->
+    {% if not num_records_input %}
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted">Here at the projections homepage you can navigate to an area that
+                                    can help you complete your Projections for the month, view old submissions and download reports for documentation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-4 col-md-4 col-sm-12 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">Upload Financial Data</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+                                    <img src="{% static 'assets/images/file-icons/upload/excel.png' %}" style="width: 100%; height: 100%">
+
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p> </p>
+                                <p class="text-muted" style="text-align: center"> Upload the financial data for this month  </p>
+
+                            </div>
+                            <div class="col-12">
+                                <a href="{% url 'dataIndex' %}" class="btn btn-info btn-lg btn-block"> Financial Data Upload Station </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-4 col-sm-12 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">Update Your Projections</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+                                    <img src="{% static 'data_upload_system/projectionsImage.png' %}" style="width: 100%; height: 100%">
+
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p> </p>
+
+                                <p class="text-muted" style="text-align: center"> Update your organization's projection data.</p>
+
+                            </div>
+                            <div class="col-12">
+                                <a href="{% url 'selectOrgToUpdate' %}" class="btn btn-info btn-lg btn-block"> Update Your Projections </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-4 col-sm-12 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">Reports</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+                                    <img src="{% static 'data_upload_system/reports.png' %}" style="width: 100%; height: 100%">
+
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p> </p>
+                                <p class="text-muted" style="text-align: center"> View projections reports from previous months </p>
+
+                            </div>
+                            <div class="col-12">
+                                <a href="https://dataviz.rice.edu/#/views/ProjectionsWorkbook_16781393338880/Reportdashboard?:embed=n&:iid=2&:origin=card_share_link" target="_blank" rel="noopener noreferrer" class="btn btn-info btn-lg btn-block"> View Projections Reports </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+
+    {% if num_records_input %}
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <h5>Upload Status:</h5>
+                                <p class="text-muted">
+                                </p>
+                            </div>
+                            <div class="col-sm-5 text-md-right">
+                                <button class="btn btn-icon-text mb-3 mb-sm-0 btn-inverse-primary font-weight-normal"
+                                        type="button">
+                                    <i class="mdi mdi-email btn-icon-prepend"></i>Open to Organizations
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        {% if num_records_input %}
+                                            <p>File with {{ num_records_input }} rows</p>
+                                            <p>{{ num_exist }} of them are duplicates</p>
+                                            <p>{{ num_successful_upload }} rows uploaded successfully</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        const dropDown = document.getElementById("monthDropdown");
+        const fileSelectorCard = document.getElementById("fileSelectorCard");
+
+        const months = {{ months|safe }};
+
+        const selectMonth = (month) => {
+            dropDown.innerHTML = months[month]
+            fileSelectorCard.style.display = "flex";
+        }
+    </script>
+{% endblock %}

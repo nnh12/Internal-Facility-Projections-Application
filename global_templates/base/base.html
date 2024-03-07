@@ -1,0 +1,311 @@
+{#{% load staticfiles %}#}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+
+
+    <title>FE&P Projections</title>
+    <link href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/a68f2a8837.js" crossorigin="anonymous"></script>
+    <link href="{% static 'assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/images/favicon.png' %}" rel="shortcut icon"/>
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body>
+<div class="container-scroller">
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
+            <a class="sidebar-brand brand-logo" href="/"><img alt="logo"
+                                                              src="{% static 'assets/images/logo.svg' %}"/></a>
+            <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="index.html"><img alt="logo"
+                                                                                      src="{% static 'assets/images/logo-mini.svg' %}"/></a>
+        </div>
+        <ul class="nav">
+            <li class="nav-item nav-profile">
+                <a class="nav-link" href="#">
+                    <div class="nav-profile-image">
+                        <img alt="profile" src="{% static 'assets/images/faces/resizedowl.png' %}"/>
+                        <span class="login-status online"></span>
+                        <!--change to offline or busy as needed-->
+                    </div>
+                    <div class="nav-profile-text d-flex flex-column pr-3">
+                        <span class="font-weight-medium mb-2" name="username">
+                            {% if request.user.first_name is none %}
+                                Anonymous
+                            {% else %}
+                                {{ request.user.first_name }} {{ request.user.last_name }}
+                            {% endif %}
+                        </span>
+                        <span class="font-weight-normal">{{ request.user.username }}</span>
+                    </div>
+                </a>
+            </li>
+            {% if request.user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/data">
+                        <i class="mdi mdi-home menu-icon"></i>
+                        <span class="menu-title">Upload Station</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="/projections/organizations">
+                    <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                    <span class="menu-title">Projections</span>
+                </a>
+            </li>
+            {% if request.user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/projections/logs">
+                        <i class="mdi mdi-chart-bar menu-icon"></i>
+                        <span class="menu-title">Logs</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://dataviz.rice.edu/#/views/ProjectionsWorkbook_16781393338880/Reportdashboard?:embed=n&:iid=2&:origin=card_share_link" target="_blank">
+                        <i class="mdi mdi-home menu-icon"></i>
+                        <span class="menu-title">Reports</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if request.user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/data/archive">
+                        <i class="mdi mdi-home menu-icon"></i>
+                        <span class="menu-title">Data Archives</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if request.user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">
+                    <i class="mdi mdi-account-multiple menu-icon"></i>
+                    <span class="menu-title">Admin</span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="nav-item sidebar-actions">
+                <div class="nav-link">
+                    <div class="mt-4">
+                        <a class="mt-4 pl-0" href="{% url 'cas_ng_logout' %}">
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <div class="settings-panel" id="theme-settings">
+            <i class="settings-close mdi mdi-close"></i>
+            <p class="settings-heading">SIDEBAR SKINS</p>
+            <div class="sidebar-bg-options selected" id="sidebar-default-theme">
+                <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                Default
+            </div>
+            <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                Dark
+            </div>
+            <p class="settings-heading mt-2">HEADER SKINS</p>
+            <div class="color-tiles mx-0 px-4">
+                <div class="tiles light"></div>
+                <div class="tiles dark"></div>
+            </div>
+        </div>
+        <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
+            <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
+                <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img alt="logo"
+                                                                                                           src="{% static 'assets/images/logo-mini.svg' %}"/></a>
+                <button class="navbar-toggler navbar-toggler align-self-center mr-2" data-toggle="minimize"
+                        type="button">
+                    <i class="mdi mdi-menu"></i>
+                </button>
+
+                <ul class="navbar-nav navbar-nav-right ml-lg-auto">
+
+                    <li class="nav-item nav-profile dropdown border-0">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="profileDropdown">
+                            <img alt="" class="nav-profile-img mr-2"
+                                 src="{% static 'assets/images/faces/resizedowl.png' %}"/>
+                            <span class="profile-name" name="username">
+                                {% if request.user.first_name is none %}
+                                    Anonymous
+                                {% else %}
+                                    {{ request.user.first_name }} {{ request.user.last_name }}
+                                {% endif %}
+                            </span>
+                        </a>
+                        <div aria-labelledby="profileDropdown" class="dropdown-menu navbar-dropdown w-100">
+                            <a class="dropdown-item" href="{% url 'cas_ng_logout' %}">
+                                <i class="mdi mdi-logout mr-2 text-primary"></i> Sign out </a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" data-toggle="offcanvas"
+                        type="button">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <div class="main-panel">
+            <div class="content-wrapper pb-0">
+                <div class="page-header flex-wrap">
+                    {% block header %} {% endblock %}
+                </div>
+                {% block body %} {% endblock %}
+                <div class="row">
+
+                </div>
+            </div>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+{% if request.user.first_name is none or request.user.last_name is none or request.user.first_name == "" or request.user.last_name == "" %}
+    <div class="modal fade none-border" id="updateUserInfo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><strong>Account Setup</strong></h4>
+
+                </div>
+                <div id="FirstLoginModalForm" data-ajax="{{ ajax_url }}" class="modal-body">
+                    {% crispy AddUserInfoForm AddUserInfoForm.helper "bootstrap4" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="addUserInfoSubmitBtn" form="addUserInfo" value="Submit"
+                            class="btn btn-info save-event waves-effect waves-light">Update Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<!-- plugins:js -->
+<script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'assets/vendors/flot/jquery.flot.js' %}"></script>
+<script src="{% static 'assets/vendors/flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'assets/vendors/flot/jquery.flot.categories.js' %}"></script>
+<script src="{% static 'assets/vendors/flot/jquery.flot.fillbetween.js' %}"></script>
+<script src="{% static 'assets/vendors/flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'assets/vendors/flot/jquery.flot.pie.js' %}"></script>
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="{% static 'assets/js/off-canvas.js' %}"></script>
+<script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+<script src="{% static 'assets/js/misc.js' %}"></script>
+<script src="{% static 'assets/js/file-upload.js' %}"></script>
+<!-- endinject -->
+<!-- Custom js for this page -->
+{#<script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>#}
+<script src="{% static 'assets/vendors/select2/select2.min.js' %}"></script>
+<script src="{% static 'assets/vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/typeahead.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<!-- End custom js for this page -->
+
+<script>
+
+    var csrftoken = $("[name='csrfmiddlewaretoken']").val();
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    function verifyField() {
+        var field1 = $("[name='emailVerify']").val();
+        var field2 = $("[name='email']").val();
+        var first = $("[name='first_name']").val();
+        var last = $("[name='last_name']").val();
+
+        if (field1 !== field2 || field1.indexOf("@") < 0 || first === "" || last === "") {
+            $("#addUserInfoSubmitBtn").prop("disabled", true);
+        } else {
+            $("#addUserInfoSubmitBtn").prop("disabled", false);
+        }
+
+    }
+
+    $(document).ready(function () {
+        //Disable the submit button initially
+        $("#addUserInfoSubmitBtn").prop("disabled", true);
+        //Prevent users from accidentally closing the modal
+        $('#updateUserInfo').modal({backdrop: 'static', keyboard: false});
+        //Set up validation on the emails provided
+        $("[name='emailVerify']").on("input", verifyField);
+        $("[name='email']").on("input", verifyField);
+        $("[name='first_name']").on("input", verifyField);
+        $("[name='last_name']").on("input", verifyField);
+        //Send the new information to the backend
+        document.getElementById("addUserInfoSubmitBtn").addEventListener("click", function (event) {
+            event.preventDefault();
+            create_post();
+            $('#updateUserInfo').modal('hide');
+        });
+
+    });
+
+    function create_post() {
+        $.ajax({
+            url: $('#FirstLoginModalForm').attr("data-ajax"), // the endpoint
+            type: "POST", // http method
+            data: {
+                first_name: $('#id_first_name').val(),
+                last_name: $('#id_last_name').val(),
+
+            }, // data sent with the post request
+
+
+            // handle a successful response
+            success: function (json) {
+                $('#post-text').val(''); // remove the value from the input
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+                $("[name='username']").text($('#id_first_name').val() + " " + $('#id_last_name').val());
+            },
+
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+</script>
+{% block scripts %}
+
+{% endblock %}
+</body>
+</html>

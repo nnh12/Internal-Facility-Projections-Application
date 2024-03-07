@@ -1,0 +1,30 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+.right-align {
+    text-align: right;
+}
+
+input[name="netBudget"] {
+  background: none !important;
+    border: none;
+}
+
+.form-control {
+    width: fit-content!important;
+}
+
+th {
+    background-color: white;
+    border-top: 1px solid #ebedf2;
+    border-bottom: 1px solid #ebedf2;
+}
+

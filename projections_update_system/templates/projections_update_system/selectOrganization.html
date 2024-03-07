@@ -1,0 +1,136 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load get_value %}
+
+
+{% block header %} <!--Greets the user on the page-->
+    <h3 class="mb-0">
+        Your Projections
+        <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block"></span>
+    </h3>
+{% endblock %}
+
+{% block body %} <!-- Body already contained in a container so feel free to just add rows -->
+    {% if not num_records_input %}
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted">Select your organization below to update the projections for this
+                                    month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h5 style="text-align: center">Select an Organization</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped">
+                                <thead>
+                                    <th>Organization</th>
+                                    <th style="text-align: center">Updated this month?</th>
+                                </thead>
+
+                                    {% for organization in myOrganizations %}
+                                        <tr>
+                                            <td>
+                                            {% if organization.id in hasUploadedData %}
+                                                <a href="{% url 'updateProjections' organization.id %}">{{ organization.name }}</a>
+                                            {% else %}
+                                                <div>{{ organization.name }}</div>
+                                            {% endif %}
+                                            </td>
+                                            <td style="text-align: center">
+                                                {% if lastUpdated|get_value:organization.id %}
+                                                    <i class="mdi mdi-check-circle-outline" style="color: green; font-size: 16px"></i>
+                                                {% else %}
+                                                    <i class="mdi mdi-close-circle-outline" style="color: red; font-size: 16px"></i>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+
+    {% if num_records_input %}
+        <div class="row">
+            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!--Heading row -->
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <h5>Upload Status:</h5>
+                                <p class="text-muted">
+                                </p>
+                            </div>
+                            <div class="col-sm-5 text-md-right">
+                                <button class="btn btn-icon-text mb-3 mb-sm-0 btn-inverse-primary font-weight-normal"
+                                        type="button">
+                                    <i class="mdi mdi-email btn-icon-prepend"></i>Open to Organizations
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        {% if num_records_input %}
+                                            <p>File with {{ num_records_input }} rows</p>
+                                            <p>{{ num_exist }} of them are duplicates</p>
+                                            <p>{{ num_successful_upload }} rows uploaded successfully</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        const dropDown = document.getElementById("monthDropdown");
+        const fileSelectorCard = document.getElementById("fileSelectorCard");
+
+        {#const months = {{ months|safe }};#}
+        {##}
+        {#const selectMonth = (month) => {#}
+        {##}
+        {#    fileSelectorCard.style.display = "flex";#}
+    </script>
+{% endblock %}
