@@ -1,7 +1,6 @@
 # FE&P Projections Tool
 
-A Django web application designed to help Rice University FE&P staff manage and view projections for
-each month
+A Django web application designed port facility expenses into a sqLite databse to be mapped into a Tableau worksheet for graphical reference. I helped develop and maintain this for Rice University DE&P staff to manage projections for each month
 
 
 
